@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 // core components
 
 import Workflow from './Workflow';
+import EditWorkflow from './EditWorkflow';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class Dashboard extends React.Component {
         {/* <Sidebar /> */}
         <BrowserRouter>
           <Switch>
+            <Route path="/dashboard/editWorkflow" component={EditWorkflow} />
             <Route path="/dashboard/index" component={Workflow} />
           </Switch>
         </BrowserRouter>

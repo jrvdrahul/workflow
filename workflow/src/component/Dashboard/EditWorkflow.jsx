@@ -39,7 +39,7 @@ var data = [
   },
 ];
 
-class Workflow extends React.Component {
+class EditWorkflow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -54,8 +54,7 @@ class Workflow extends React.Component {
     });
   }
 
-  stateChange(event, index) {
-    event.preventDefault();
+  stateChange(index) {
     data[index].state = 'pending';
     this.setState({ workflows: data });
   }
@@ -66,15 +65,11 @@ class Workflow extends React.Component {
   }
 
   render() {
-    if (this.state.success) {
-      return <Redirect to="dashboard/index" />;
-    }
-
     let workflows = this.state.workflows;
     return (
       <>
         <Container fluid>
-          <section id="workflow" className="">
+          <section id="editWorkflow" className="">
             <Row className="header">
               <Col></Col>
               <Col className="text-right">
@@ -83,56 +78,41 @@ class Workflow extends React.Component {
             </Row>
             <Row className="actionBar">
               <Col md="4">
-                <div>Search workflows based on workflow name</div>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText></InputGroupText>
                     </InputGroupAddon>
                     <Input
-                      placeholder="search"
-                      type="password"
+                      placeholder="Workflow name"
+                      type="text"
                       onChange={(event) =>
-                        this.setState({ password: event.target.value })
+                        this.setState({ name: event.target.value })
                       }
                     />
                   </InputGroup>
                 </FormGroup>
               </Col>
-              <Col md="2">
-                <FormGroup></FormGroup>
-              </Col>
-              <Col md="6" className="text-right">
-                <Button color="secondary">Create Workflow</Button>
+              <Col md="8" className="text-right">
+                <Button color="secondary">Shuffle</Button>
+                <Button color="secondary">Delete</Button>
+                <Button color="secondary">Add Note</Button>
+                <Button color="secondary">Save</Button>
               </Col>
             </Row>
             <Row className="workflowList">
               {workflows.map((data, index) => (
                 <Col md="3">
-                  <Link to="editWorkflow">
-                    <Card>
-                      <div onClick={() => this.WorkflowDelete(index)}>
-                        <i class="fas fa-trash"></i>
+                  <Card>
+                    <CardBody>
+                      <div>{data.name}</div>
+                      <div>
+                        <FormGroup>
+                          <Input type="textarea" name="text" />
+                        </FormGroup>
                       </div>
-                      <CardBody>
-                        <div>{data.name}</div>
-                        <Row>
-                          <Col>
-                            <div>{data.state}</div>
-                          </Col>
-                          <Col>
-                            <div
-                              onClick={(event) =>
-                                this.stateChange(event, index)
-                              }
-                            >
-                              <i class="fas fa-check-circle"></i>
-                            </div>
-                          </Col>
-                        </Row>
-                      </CardBody>
-                    </Card>
-                  </Link>
+                    </CardBody>
+                  </Card>
                 </Col>
               ))}
             </Row>
@@ -144,4 +124,4 @@ class Workflow extends React.Component {
   }
 }
 
-export default Workflow;
+export default EditWorkflow;
