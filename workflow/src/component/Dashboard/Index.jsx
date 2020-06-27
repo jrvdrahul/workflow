@@ -15,20 +15,24 @@ class Dashboard extends React.Component {
   }
   render() {
     console.log(this.state.token == null);
-    // if (
-    //   this.state.token == '' ||
-    //   this.state.token == null ||
-    //   this.state.token == 'undefined'
-    // ) {
-    //   alert();
-    //   return <Redirect to="/" />;
-    // }
+    if (
+      this.state.token == '' ||
+      this.state.token == null ||
+      this.state.token == 'undefined'
+    ) {
+      alert();
+      return <Redirect to="/" />;
+    }
     return (
       <>
         {/* <Sidebar /> */}
         <BrowserRouter>
           <Switch>
-            <Route path="/dashboard/editWorkflow" component={EditWorkflow} />
+            <Route path="/dashboard/createWorkflow/" component={EditWorkflow} />
+            <Route
+              path="/dashboard/editWorkflow/:id"
+              component={EditWorkflow}
+            />
             <Route path="/dashboard/index" component={Workflow} />
           </Switch>
         </BrowserRouter>

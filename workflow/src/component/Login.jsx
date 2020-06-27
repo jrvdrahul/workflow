@@ -33,13 +33,15 @@ class Login extends React.Component {
 
   login = (e) => {
     e.preventDefault();
-    if (this.state.number == '' || this.state.number == undefined) {
-      NotificationManager.error('Number is required', 'Error!');
+    if (this.state.email == '' || this.state.email == undefined) {
+      NotificationManager.error('Email is required', 'Error!');
       return false;
     } else if (this.state.password == '' || this.state.password == undefined) {
       NotificationManager.error('Password is required', 'Error!');
       return false;
     }
+    localStorage.setItem('token', 'a2wqswq2wsed');
+    this.setState({ success: true });
   };
 
   render() {
@@ -63,7 +65,7 @@ class Login extends React.Component {
                         placeholder="Email"
                         type="text"
                         onChange={(event) =>
-                          this.setState({ number: event.target.value })
+                          this.setState({ email: event.target.value })
                         }
                       />
                     </InputGroup>
@@ -89,12 +91,7 @@ class Login extends React.Component {
                   </FormGroup>
 
                   <div className="text-center ">
-                    <Button
-                      className="mt-4"
-                      color="secondary"
-                      type="submit"
-                      disabled={!this.state.number || !this.state.password}
-                    >
+                    <Button className="mt-4" color="secondary" type="submit">
                       Login
                     </Button>
                   </div>

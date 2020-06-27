@@ -25,18 +25,9 @@ import {
 import 'react-notifications/lib/notifications.css';
 
 var data = [
-  {
-    name: 'workflow1',
-    state: 'completed',
-  },
-  {
-    name: 'workflow2',
-    state: 'pending',
-  },
-  {
-    name: 'workflow2',
-    state: 'completed',
-  },
+  { id: 0, name: 'workflow1', state: 'completed' },
+  { id: 1, name: 'workflow2', state: 'pending' },
+  { id: 2, name: 'workflow2', state: 'completed' },
 ];
 
 class Workflow extends React.Component {
@@ -45,6 +36,7 @@ class Workflow extends React.Component {
     this.state = {
       workflows: [],
       success: false,
+      filter: 0,
     };
   }
 
@@ -65,6 +57,23 @@ class Workflow extends React.Component {
     this.setState({ workflows: data });
   }
 
+  logout() {
+    localStorage.removeItem('token');
+    window.location.assign('/login');
+  }
+
+  filterList(event) {
+    var list = data;
+    var result = list.filter((list) => list.name.includes(event.target.value));
+    this.setState({ workflows: result });
+  }
+
+  filter = (e) => {
+    var list = data;
+    var result = list.filter((list) => list.state == e.target.value);
+    this.setState({ workflows: result });
+  };
+
   render() {
     if (this.state.success) {
       return <Redirect to="dashboard/index" />;
@@ -78,7 +87,9 @@ class Workflow extends React.Component {
             <Row className="header">
               <Col></Col>
               <Col className="text-right">
-                <Button color="secondary">Logout</Button>
+                <Button color="secondary" onClick={() => this.logout()}>
+                  Logout
+                </Button>
               </Col>
             </Row>
             <Row className="actionBar">
@@ -91,25 +102,42 @@ class Workflow extends React.Component {
                     </InputGroupAddon>
                     <Input
                       placeholder="search"
-                      type="password"
-                      onChange={(event) =>
-                        this.setState({ password: event.target.value })
-                      }
+                      type="text"
+                      onChange={(event) => this.filterList(event)}
                     />
                   </InputGroup>
                 </FormGroup>
               </Col>
               <Col md="2">
-                <FormGroup></FormGroup>
+                <div>Filter workflow </div>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative mb-3">
+                    <Input
+                      type="select"
+                      name="Select state"
+                      onChange={this.filter}
+                      value={this.state.filter}
+                    >
+                      <option value="0" disabled selected>
+                        Select state
+                      </option>
+                      <option value="All">All</option>
+                      <option value="pending">Pending</option>
+                      <option value="completed">Completed</option>
+                    </Input>
+                  </InputGroup>
+                </FormGroup>
               </Col>
               <Col md="6" className="text-right">
-                <Button color="secondary">Create Workflow</Button>
+                <Button color="secondary" to="createWorkflow" tag={Link}>
+                  Create Workflow
+                </Button>
               </Col>
             </Row>
             <Row className="workflowList">
               {workflows.map((data, index) => (
                 <Col md="3">
-                  <Link to="editWorkflow">
+                  <Link to={'editWorkflow/' + data.id}>
                     <Card>
                       <div onClick={() => this.WorkflowDelete(index)}>
                         <i class="fas fa-trash"></i>
