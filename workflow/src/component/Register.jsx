@@ -108,7 +108,7 @@ class Register extends React.Component {
                     </Button>
                   </div>
                   <div className="mt-4">
-                    {/* Already have an Account ? <Link to="register">Login here</Link> */}
+                    Already have an Account ? <Link to="/">Login here</Link>
                   </div>
                 </Form>
               </CardBody>

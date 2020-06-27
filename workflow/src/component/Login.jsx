@@ -99,7 +99,7 @@ class Login extends React.Component {
                     </Button>
                   </div>
                   <div className="mt-4">
-                    {/* Don't have an Account ? <Link to="register">Sign up here</Link> */}
+                    Don't have an Account ?<Link to="signUp">Sign up here</Link>
                   </div>
                 </Form>
               </CardBody>
