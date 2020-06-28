@@ -23,101 +23,80 @@ import {
   NotificationManager,
 } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import Data from '../../Data.json';
 
-var data = [
-  {
-    id: 0,
-    name: 'workflow1',
-    state: 'completed',
-    nodes: [
-      { title: 'node1', content: 'content', state: 'progress' },
-      { title: 'node2', content: 'content2', state: 'progress' },
-      { title: 'node3', content: 'content3', state: 'progress' },
-    ],
-  },
-  {
-    id: 1,
-    name: 'workflow2',
-    state: 'pending',
-    nodes: [{ title: 'node1', content: 'content', state: 'progress' }],
-  },
-  {
-    id: 2,
-    name: 'workflow2',
-    state: 'completed',
-    nodes: [{ title: 'node1', content: 'content', state: 'progress' }],
-  },
-];
+var newArr = [];
 
 class EditWorkflow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      workflows: [],
+      node: [],
       success: false,
     };
   }
 
   componentDidMount() {
+    console.log(Data);
+
     var id = this.props.match.params.id;
     if (id != undefined) {
-      var result = data.filter((data) => data.id == id);
+      var result = Data.filter((data) => data.id == id);
       this.setState({
-        workflows: result[0].nodes,
+        node: result[0].nodes,
       });
     } else {
       console.log('in');
-      this.state.workflows.push({
+      newArr.push({
+        id: Math.random().toString(36).substr(2, 10),
         name: '',
         state: 'pending',
         nodes: [],
       });
-      this.setState({ workflows: this.state.workflows[0].nodes });
+      this.setState({ node: newArr[0].nodes });
     }
   }
 
   stateChange(index) {
-    console.log(data[0].nodes[index].state);
-    data[0].nodes[index].state = 'complete';
-    console.log(data[0].nodes[index].state);
-    this.setState({ workflows: data[0].nodes });
-
-    // this.state.workflows[index].state = 'complete';
-    // console.log(this.state.workflows[index].state);
-    // this.setState({ workflows: this.state.workflows });
+    this.state.node[index].state = 'complete';
+    this.setState({ node: this.state.node });
   }
 
   deleteNode() {
-    this.state.workflows.pop();
-    this.setState({ workflows: this.state.workflows });
+    this.state.node.pop();
+    this.setState({ node: this.state.node });
   }
 
   addNode() {
-    this.state.workflows.push({
+    this.state.node.push({
       title: '',
       content: '',
       state: 'pending',
     });
-    this.setState({ workflows: this.state.workflows });
+    this.setState({ node: this.state.node });
+    console.log(Data);
   }
 
   titleChange(event, index) {
-    this.state.workflows[index].title = event.target.value;
-    this.setState({ workflows: this.state.workflows });
+    this.state.node[index].title = event.target.value;
+    this.setState({ node: this.state.node });
   }
 
   contentChange(event, index) {
-    this.state.workflows[index].content = event.target.value;
-    this.setState({ workflows: this.state.workflows });
+    this.state.node[index].content = event.target.value;
+    this.setState({ node: this.state.node });
   }
 
-  // save() {
-  //   this.state.workflows[0].nodes = this.state.nodes;
-  //   this.setState({ workflows: this.state.nodes });
-  // }
+  save() {
+    newArr.nodes = this.state.node;
+    Data.push(newArr[0]);
+    // this.state.workflows[0].nodes = this.state.nodes;
+    // this.setState({ workflows: this.state.nodes });
+  }
 
   render() {
-    let workflows = this.state.workflows;
+    let node = this.state.node;
+    console.log(node);
     return (
       <>
         <Container fluid>
@@ -159,10 +138,13 @@ class EditWorkflow extends React.Component {
               </Col>
             </Row>
             <Row className="workflowList">
-              {workflows.map((data, index) => (
+              {node.map((data, index) => (
                 <Col md="3" className="mt-4">
                   <Card>
-                    <div onClick={() => this.stateChange(index)}>
+                    <div
+                      className="nodeState"
+                      onClick={() => this.stateChange(index)}
+                    >
                       <i class="fas fa-check-circle"></i>
                     </div>
                     {data.state}

@@ -1,0 +1,24 @@
+[
+  {
+    "id": 0,
+    "name": "workflow1",
+    "state": "completed",
+    "nodes": [
+      { "title": "node1", "content": "content", "state": "progress" },
+      { "title": "node2", "content": "content2", "state": "progress" },
+      { "title": "node3", "content": "content3", "state": "progress" }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "workflow2",
+    "state": "pending",
+    "nodes": [{ "title": "node1", "content": "content", "state": "progress" }]
+  },
+  {
+    "id": 2,
+    "name": "workflow3",
+    "state": "pending",
+    "nodes": [{ "title": "node1", "content": "content", "state": "progress" }]
+  }
+]

@@ -12,3 +12,20 @@
   background: #ab3db1;
   padding: 10px;
 }
+.actionBar {
+  padding: 10px;
+  border-bottom: 2px solid black;
+  margin-bottom: 30px;
+}
+.delete,
+.nodeState {
+  position: absolute;
+  right: 0px;
+  top: -10px;
+}
+.inline-block {
+  display: inline-block;
+}
+.mt-50 {
+  margin-top: 50px;
+}

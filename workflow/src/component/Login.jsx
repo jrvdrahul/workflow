@@ -59,7 +59,9 @@ class Login extends React.Component {
                   <FormGroup>
                     <InputGroup className="input-group-alternative mb-3">
                       <InputGroupAddon addonType="prepend">
-                        <InputGroupText></InputGroupText>
+                        <InputGroupText>
+                          <i class="far fa-envelope"></i>
+                        </InputGroupText>
                       </InputGroupAddon>
                       <Input
                         placeholder="Email"
@@ -73,7 +75,9 @@ class Login extends React.Component {
                   <FormGroup>
                     <InputGroup className="input-group-alternative mb-3">
                       <InputGroupAddon addonType="prepend">
-                        <InputGroupText></InputGroupText>
+                        <InputGroupText>
+                          <i class="fas fa-asterisk"></i>
+                        </InputGroupText>
                       </InputGroupAddon>
                       <Input
                         placeholder="Password"

@@ -23,12 +23,7 @@ import {
   NotificationManager,
 } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-
-var data = [
-  { id: 0, name: 'workflow1', state: 'completed' },
-  { id: 1, name: 'workflow2', state: 'pending' },
-  { id: 2, name: 'workflow2', state: 'completed' },
-];
+import data from '../../Data.json';
 
 class Workflow extends React.Component {
   constructor(props) {
@@ -52,7 +47,8 @@ class Workflow extends React.Component {
     this.setState({ workflows: data });
   }
 
-  WorkflowDelete(index) {
+  WorkflowDelete(event, index) {
+    event.preventDefault();
     data.splice(index, 1);
     this.setState({ workflows: data });
   }
@@ -97,9 +93,6 @@ class Workflow extends React.Component {
                 <div>Search workflows based on workflow name</div>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText></InputGroupText>
-                    </InputGroupAddon>
                     <Input
                       placeholder="search"
                       type="text"
@@ -136,10 +129,13 @@ class Workflow extends React.Component {
             </Row>
             <Row className="workflowList">
               {workflows.map((data, index) => (
-                <Col md="3">
+                <Col md="3" className="mt-50">
                   <Link to={'editWorkflow/' + data.id}>
                     <Card>
-                      <div onClick={() => this.WorkflowDelete(index)}>
+                      <div
+                        className="delete"
+                        onClick={(event) => this.WorkflowDelete(event, index)}
+                      >
                         <i class="fas fa-trash"></i>
                       </div>
                       <CardBody>
@@ -148,8 +144,9 @@ class Workflow extends React.Component {
                           <Col>
                             <div>{data.state}</div>
                           </Col>
-                          <Col>
+                          <Col className="text-right">
                             <div
+                              className="inline-block"
                               onClick={(event) =>
                                 this.stateChange(event, index)
                               }
