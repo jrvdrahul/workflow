@@ -23,9 +23,41 @@
   right: 0px;
   top: -10px;
 }
-.inline-block {
-  display: inline-block;
-}
+
 .mt-50 {
   margin-top: 50px;
+}
+.completed,
+.pending {
+  display: inline-block;
+}
+.completed .fa-check-circle {
+  color: green;
+  font-size: 25px;
+}
+.progress .fa-check-circle {
+  color: blue;
+  font-size: 25px;
+}
+.pending .fa-check-circle {
+  color: grey;
+  font-size: 25px;
+}
+a {
+  color: black;
+}
+.workflowName {
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+#editWorkflow .completed,
+#editWorkflow .pending,
+#editWorkflow .progress {
+  position: absolute;
+  right: 0px;
+  top: -10px;
+  height: auto;
 }

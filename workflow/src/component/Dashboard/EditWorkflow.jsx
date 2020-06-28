@@ -1,6 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
 // reactstrap components
 import {
@@ -8,12 +6,8 @@ import {
   Card,
   CardBody,
   FormGroup,
-  Form,
   Input,
-  InputGroupAddon,
-  InputGroupText,
   InputGroup,
-  Label,
   Row,
   Col,
   Container,
@@ -41,30 +35,37 @@ class EditWorkflow extends React.Component {
     if (id != undefined) {
       var result = Data.filter((data) => data.id == id);
       this.setState({
+        name: result[0].name,
         node: [...result[0].nodes],
       });
     } else {
       newArr = [];
       newArr.push({
-        id: Data.length - 1,
+        id: Data.length,
         name: '',
         state: 'pending',
         nodes: [],
       });
-      console.log(newArr[0].nodes);
       this.setState({ node: newArr[0].nodes });
     }
   }
 
   stateChange(index) {
-    this.state.node[index].state = 'complete';
+    if (this.state.node[index].state === 'pending') {
+      this.state.node[index].state = 'progress';
+    } else if (this.state.node[index].state === 'progress') {
+      this.state.node[index].state = 'completed';
+    } else if (this.state.node[index].state === 'completed') {
+      this.state.node[index].state = 'pending';
+    }
+
     this.setState({ node: this.state.node });
   }
 
   deleteNode() {
     this.state.node.pop();
     this.setState({ node: this.state.node });
-    console.log(Data);
+    NotificationManager.success('Node Deleted Successfully');
   }
 
   addNode() {
@@ -74,6 +75,7 @@ class EditWorkflow extends React.Component {
       state: 'pending',
     });
     this.setState({ node: this.state.node });
+    NotificationManager.success('Node Added Successfully');
   }
 
   titleChange(event, index) {
@@ -90,11 +92,18 @@ class EditWorkflow extends React.Component {
     var id = this.props.match.params.id;
 
     if (id) {
+      Data[id].name = this.state.name;
       Data[id].nodes = this.state.node;
     } else {
+      newArr.name = this.state.name;
       newArr.nodes = this.state.node;
       Data.push(newArr[0]);
     }
+    NotificationManager.success('Worflow Updated Successfully');
+
+    setTimeout(() => {
+      this.props.history.push('/dashboard/index');
+    }, 800);
   }
 
   render() {
@@ -114,12 +123,10 @@ class EditWorkflow extends React.Component {
               <Col md="4">
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText></InputGroupText>
-                    </InputGroupAddon>
                     <Input
                       placeholder="Workflow name"
                       type="text"
+                      value={this.state.name}
                       onChange={(event) =>
                         this.setState({ name: event.target.value })
                       }
@@ -145,12 +152,12 @@ class EditWorkflow extends React.Component {
                 <Col md="3" className="mt-4">
                   <Card>
                     <div
-                      className="nodeState"
+                      className={data.state}
                       onClick={() => this.stateChange(index)}
                     >
-                      <i class="fas fa-check-circle"></i>
+                      <i className="fas fa-check-circle"></i>
                     </div>
-                    {data.state}
+
                     <CardBody>
                       <FormGroup>
                         <InputGroup className="input-group-alternative mb-3">
@@ -166,6 +173,7 @@ class EditWorkflow extends React.Component {
                       <FormGroup>
                         <Input
                           type="textarea"
+                          rows="10"
                           name="text"
                           placeholder="content"
                           value={data.content}

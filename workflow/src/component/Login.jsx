@@ -14,8 +14,6 @@ import {
   InputGroupText,
   InputGroup,
   Label,
-  Row,
-  Col,
 } from 'reactstrap';
 import {
   NotificationContainer,
@@ -33,10 +31,13 @@ class Login extends React.Component {
 
   login = (e) => {
     e.preventDefault();
-    if (this.state.email == '' || this.state.email == undefined) {
+    if (this.state.email === '' || this.state.email === undefined) {
       NotificationManager.error('Email is required', 'Error!');
       return false;
-    } else if (this.state.password == '' || this.state.password == undefined) {
+    } else if (
+      this.state.password === '' ||
+      this.state.password === undefined
+    ) {
       NotificationManager.error('Password is required', 'Error!');
       return false;
     }
@@ -60,12 +61,12 @@ class Login extends React.Component {
                     <InputGroup className="input-group-alternative mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
-                          <i class="far fa-envelope"></i>
+                          <i className="far fa-envelope"></i>
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
                         placeholder="Email"
-                        type="text"
+                        type="email"
                         onChange={(event) =>
                           this.setState({ email: event.target.value })
                         }
@@ -76,7 +77,7 @@ class Login extends React.Component {
                     <InputGroup className="input-group-alternative mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
-                          <i class="fas fa-asterisk"></i>
+                          <i className="fas fa-asterisk"></i>
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input

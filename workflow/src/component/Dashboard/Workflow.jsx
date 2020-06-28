@@ -8,12 +8,8 @@ import {
   Card,
   CardBody,
   FormGroup,
-  Form,
   Input,
-  InputGroupAddon,
-  InputGroupText,
   InputGroup,
-  Label,
   Row,
   Col,
   Container,
@@ -43,8 +39,20 @@ class Workflow extends React.Component {
 
   stateChange(event, index) {
     event.preventDefault();
-    data[index].state = 'pending';
-    this.setState({ workflows: data });
+    var pass = data[index].nodes.filter(
+      (data) => data.state === 'pending' || data.state === 'progress'
+    );
+
+    if (pass.length < 1) {
+      if (data[index].state === 'pending') {
+        data[index].state = 'completed';
+      } else {
+        data[index].state = 'pending';
+      }
+      this.setState({ workflows: data });
+    } else {
+      NotificationManager.error('Complete all node first', 'Error!');
+    }
   }
 
   WorkflowDelete(event, index) {
@@ -66,8 +74,12 @@ class Workflow extends React.Component {
 
   filter = (e) => {
     var list = data;
-    var result = list.filter((list) => list.state == e.target.value);
-    this.setState({ workflows: result });
+    if (e.target.value === 'All') {
+      this.setState({ workflows: data });
+    } else {
+      var result = list.filter((list) => list.state === e.target.value);
+      this.setState({ workflows: result });
+    }
   };
 
   render() {
@@ -129,29 +141,29 @@ class Workflow extends React.Component {
             </Row>
             <Row className="workflowList">
               {workflows.map((data, index) => (
-                <Col md="3" className="mt-50">
+                <Col md="3" className="mt-50" key={index}>
                   <Link to={'editWorkflow/' + data.id}>
                     <Card>
                       <div
                         className="delete"
                         onClick={(event) => this.WorkflowDelete(event, index)}
                       >
-                        <i class="fas fa-trash"></i>
+                        <i className="fas fa-trash"></i>
                       </div>
                       <CardBody>
-                        <div>{data.name}</div>
+                        <div className="workflowName">{data.name}</div>
                         <Row>
                           <Col>
                             <div>{data.state}</div>
                           </Col>
                           <Col className="text-right">
                             <div
-                              className="inline-block"
+                              className={data.state}
                               onClick={(event) =>
                                 this.stateChange(event, index)
                               }
                             >
-                              <i class="fas fa-check-circle"></i>
+                              <i className="fas fa-check-circle"></i>
                             </div>
                           </Col>
                         </Row>

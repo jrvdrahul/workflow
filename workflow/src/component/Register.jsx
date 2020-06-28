@@ -13,9 +13,6 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Label,
-  Row,
-  Col,
 } from 'reactstrap';
 import {
   NotificationContainer,
@@ -31,13 +28,25 @@ class Register extends React.Component {
     };
   }
 
-  login = (e) => {
+  register = (e) => {
     e.preventDefault();
-    if (this.state.number == '' || this.state.number == undefined) {
-      NotificationManager.error('Number is required', 'Error!');
+    if (this.state.email === '' || this.state.email === undefined) {
+      NotificationManager.error('Email is required', 'Error!');
       return false;
-    } else if (this.state.password == '' || this.state.password == undefined) {
+    } else if (
+      this.state.password === '' ||
+      this.state.password === undefined
+    ) {
       NotificationManager.error('Password is required', 'Error!');
+      return false;
+    } else if (
+      this.state.confirmPassword === '' ||
+      this.state.confirmPassword === undefined
+    ) {
+      NotificationManager.error('Confirm Password is required', 'Error!');
+      return false;
+    } else if (this.state.password === this.state.confirmPassword) {
+      NotificationManager.error('Password do not matched', 'Error!');
       return false;
     }
   };
@@ -53,19 +62,19 @@ class Register extends React.Component {
             <Card className="shadow border-0">
               <CardBody className="px-lg-5 py-lg-5">
                 <h3 className="text-center">Sign up</h3>
-                <Form onSubmit={this.login}>
+                <Form onSubmit={this.register}>
                   <FormGroup>
                     <InputGroup className="input-group-alternative mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
-                          <i class="far fa-envelope"></i>
+                          <i className="far fa-envelope"></i>
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
                         placeholder="Email"
-                        type="text"
+                        type="email"
                         onChange={(event) =>
-                          this.setState({ number: event.target.value })
+                          this.setState({ email: event.target.value })
                         }
                       />
                     </InputGroup>
@@ -74,7 +83,7 @@ class Register extends React.Component {
                     <InputGroup className="input-group-alternative mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
-                          <i class="fas fa-asterisk"></i>
+                          <i className="fas fa-asterisk"></i>
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
@@ -97,19 +106,14 @@ class Register extends React.Component {
                         placeholder="Confirm Password"
                         type="password"
                         onChange={(event) =>
-                          this.setState({ password: event.target.value })
+                          this.setState({ confirmPassword: event.target.value })
                         }
                       />
                     </InputGroup>
                   </FormGroup>
 
                   <div className="text-center ">
-                    <Button
-                      className="mt-4"
-                      color="secondary"
-                      type="submit"
-                      disabled={!this.state.number || !this.state.password}
-                    >
+                    <Button className="mt-4" color="secondary" type="submit">
                       Sign up
                     </Button>
                   </div>
