@@ -37,22 +37,21 @@ class EditWorkflow extends React.Component {
   }
 
   componentDidMount() {
-    console.log(Data);
-
     var id = this.props.match.params.id;
     if (id != undefined) {
       var result = Data.filter((data) => data.id == id);
       this.setState({
-        node: result[0].nodes,
+        node: [...result[0].nodes],
       });
     } else {
-      console.log('in');
+      newArr = [];
       newArr.push({
-        id: Math.random().toString(36).substr(2, 10),
+        id: Data.length - 1,
         name: '',
         state: 'pending',
         nodes: [],
       });
+      console.log(newArr[0].nodes);
       this.setState({ node: newArr[0].nodes });
     }
   }
@@ -65,6 +64,7 @@ class EditWorkflow extends React.Component {
   deleteNode() {
     this.state.node.pop();
     this.setState({ node: this.state.node });
+    console.log(Data);
   }
 
   addNode() {
@@ -74,7 +74,6 @@ class EditWorkflow extends React.Component {
       state: 'pending',
     });
     this.setState({ node: this.state.node });
-    console.log(Data);
   }
 
   titleChange(event, index) {
@@ -88,15 +87,19 @@ class EditWorkflow extends React.Component {
   }
 
   save() {
-    newArr.nodes = this.state.node;
-    Data.push(newArr[0]);
-    // this.state.workflows[0].nodes = this.state.nodes;
-    // this.setState({ workflows: this.state.nodes });
+    var id = this.props.match.params.id;
+
+    if (id) {
+      Data[id].nodes = this.state.node;
+    } else {
+      newArr.nodes = this.state.node;
+      Data.push(newArr[0]);
+    }
   }
 
   render() {
     let node = this.state.node;
-    console.log(node);
+    console.log('node', node);
     return (
       <>
         <Container fluid>

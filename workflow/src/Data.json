@@ -13,12 +13,12 @@
     "id": 1,
     "name": "workflow2",
     "state": "pending",
-    "nodes": [{ "title": "node1", "content": "content", "state": "progress" }]
+    "nodes": [{ "title": "node4", "content": "content", "state": "progress" }]
   },
   {
     "id": 2,
     "name": "workflow3",
     "state": "pending",
-    "nodes": [{ "title": "node1", "content": "content", "state": "progress" }]
+    "nodes": [{ "title": "node5", "content": "content", "state": "progress" }]
   }
 ]
