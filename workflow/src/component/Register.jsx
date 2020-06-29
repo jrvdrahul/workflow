@@ -27,7 +27,7 @@ class Register extends React.Component {
       success: false,
     };
   }
-
+  // register event
   register = (e) => {
     e.preventDefault();
     if (this.state.email === '' || this.state.email === undefined) {
@@ -45,10 +45,11 @@ class Register extends React.Component {
     ) {
       NotificationManager.error('Confirm Password is required', 'Error!');
       return false;
-    } else if (this.state.password === this.state.confirmPassword) {
+    } else if (this.state.password !== this.state.confirmPassword) {
       NotificationManager.error('Password do not matched', 'Error!');
       return false;
     }
+    NotificationManager.success('Registered Successfully');
   };
 
   render() {
@@ -57,11 +58,12 @@ class Register extends React.Component {
     }
     return (
       <>
-        <section id="login" className="perfect-center">
+        <section id="register" className="perfect-center">
           <div className="login">
             <Card className="shadow border-0">
               <CardBody className="px-lg-5 py-lg-5">
                 <h3 className="text-center">Sign up</h3>
+                {/* register form */}
                 <Form onSubmit={this.register}>
                   <FormGroup>
                     <InputGroup className="input-group-alternative mb-3">
@@ -117,7 +119,7 @@ class Register extends React.Component {
                       Sign up
                     </Button>
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-4 blue-text">
                     Already have an Account ? <Link to="/">Login here</Link>
                   </div>
                 </Form>

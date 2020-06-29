@@ -29,6 +29,7 @@ class Login extends React.Component {
     };
   }
 
+  // login event
   login = (e) => {
     e.preventDefault();
     if (this.state.email === '' || this.state.email === undefined) {
@@ -56,6 +57,7 @@ class Login extends React.Component {
             <Card className="shadow border-0">
               <CardBody className="px-lg-5 py-lg-5">
                 <h3 className="text-center">Login</h3>
+                {/* login form */}
                 <Form onSubmit={this.login}>
                   <FormGroup>
                     <InputGroup className="input-group-alternative mb-3">
@@ -100,8 +102,9 @@ class Login extends React.Component {
                       Login
                     </Button>
                   </div>
-                  <div className="mt-4">
-                    Don't have an Account ?<Link to="signUp">Sign up here</Link>
+                  <div className="mt-4 blue-text">
+                    Don't have an Account ?
+                    <Link to="signUp"> Sign up here</Link>
                   </div>
                 </Form>
               </CardBody>

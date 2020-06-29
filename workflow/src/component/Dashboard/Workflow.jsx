@@ -20,6 +20,7 @@ import {
 } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import data from '../../Data.json';
+import Header from './Header';
 
 class Workflow extends React.Component {
   constructor(props) {
@@ -37,6 +38,7 @@ class Workflow extends React.Component {
     });
   }
 
+  // workflow state change
   stateChange(event, index) {
     event.preventDefault();
     var pass = data[index].nodes.filter(
@@ -55,23 +57,21 @@ class Workflow extends React.Component {
     }
   }
 
+  // delete workflow
   WorkflowDelete(event, index) {
     event.preventDefault();
     data.splice(index, 1);
     this.setState({ workflows: data });
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    window.location.assign('/login');
-  }
-
+  // search workflow
   filterList(event) {
     var list = data;
     var result = list.filter((list) => list.name.includes(event.target.value));
     this.setState({ workflows: result });
   }
 
+  // filter workflow
   filter = (e) => {
     var list = data;
     if (e.target.value === 'All') {
@@ -92,14 +92,9 @@ class Workflow extends React.Component {
       <>
         <Container fluid>
           <section id="workflow" className="">
-            <Row className="header">
-              <Col></Col>
-              <Col className="text-right">
-                <Button color="secondary" onClick={() => this.logout()}>
-                  Logout
-                </Button>
-              </Col>
-            </Row>
+            {/* header */}
+            <Header />
+            {/* action bar */}
             <Row className="actionBar">
               <Col md="4">
                 <div>Search workflows based on workflow name</div>
@@ -139,6 +134,7 @@ class Workflow extends React.Component {
                 </Button>
               </Col>
             </Row>
+            {/* workflow list */}
             <Row className="workflowList">
               {workflows.map((data, index) => (
                 <Col md="3" className="mt-50" key={index}>

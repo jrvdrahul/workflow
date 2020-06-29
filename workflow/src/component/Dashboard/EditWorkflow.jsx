@@ -18,6 +18,7 @@ import {
 } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import Data from '../../Data.json';
+import Header from './Header';
 
 var newArr = [];
 
@@ -50,6 +51,7 @@ class EditWorkflow extends React.Component {
     }
   }
 
+  // node state change
   stateChange(index) {
     if (this.state.node[index].state === 'pending') {
       this.state.node[index].state = 'progress';
@@ -62,12 +64,14 @@ class EditWorkflow extends React.Component {
     this.setState({ node: this.state.node });
   }
 
+  // delete node
   deleteNode() {
     this.state.node.pop();
     this.setState({ node: this.state.node });
     NotificationManager.success('Node Deleted Successfully');
   }
 
+  // add node
   addNode() {
     this.state.node.push({
       title: '',
@@ -78,16 +82,19 @@ class EditWorkflow extends React.Component {
     NotificationManager.success('Node Added Successfully');
   }
 
+  // title change event
   titleChange(event, index) {
     this.state.node[index].title = event.target.value;
     this.setState({ node: this.state.node });
   }
 
+  // content change event
   contentChange(event, index) {
     this.state.node[index].content = event.target.value;
     this.setState({ node: this.state.node });
   }
 
+  // save event
   save() {
     var id = this.props.match.params.id;
 
@@ -108,17 +115,13 @@ class EditWorkflow extends React.Component {
 
   render() {
     let node = this.state.node;
-    console.log('node', node);
     return (
       <>
         <Container fluid>
           <section id="editWorkflow" className="">
-            <Row className="header">
-              <Col></Col>
-              <Col className="text-right">
-                <Button color="secondary">Logout</Button>
-              </Col>
-            </Row>
+            {/* header */}
+            <Header />
+            {/* action bar */}
             <Row className="actionBar">
               <Col md="4">
                 <FormGroup>
@@ -147,9 +150,10 @@ class EditWorkflow extends React.Component {
                 </Button>
               </Col>
             </Row>
+            {/* Node list */}
             <Row className="workflowList">
               {node.map((data, index) => (
-                <Col md="3" className="mt-4">
+                <Col md="3" className="mt-4" key={index}>
                   <Card>
                     <div
                       className={data.state}
