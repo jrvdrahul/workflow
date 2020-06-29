@@ -102,8 +102,8 @@ class EditWorkflow extends React.Component {
       Data[id].name = this.state.name;
       Data[id].nodes = this.state.node;
     } else {
-      newArr.name = this.state.name;
-      newArr.nodes = this.state.node;
+      newArr[0].name = this.state.name;
+      newArr[0].nodes = this.state.node;
       Data.push(newArr[0]);
     }
     NotificationManager.success('Worflow Updated Successfully');
