@@ -96,6 +96,13 @@ class EditWorkflow extends React.Component {
 
   // save event
   save() {
+    if(!this.state.name){
+      NotificationManager.error('Workflow Name is required', 'Error!');
+      return false;
+    }
+
+    console.log('innnnn')
+
     var id = this.props.match.params.id;
 
     if (id) {

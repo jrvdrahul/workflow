@@ -2,6 +2,8 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
+import {connect} from 'react-redux';
+
 // reactstrap components
 import {
   Button,
@@ -32,6 +34,7 @@ class Login extends React.Component {
   // login event
   login = (e) => {
     e.preventDefault();
+
     if (this.state.email === '' || this.state.email === undefined) {
       NotificationManager.error('Email is required', 'Error!');
       return false;
@@ -42,8 +45,19 @@ class Login extends React.Component {
       NotificationManager.error('Password is required', 'Error!');
       return false;
     }
-    localStorage.setItem('token', 'a2wqswq2wsed');
-    this.setState({ success: true });
+
+
+    console.log(this.props.user);
+    var result=this.props.user.find(data=>data.email==this.state.email)
+    console.log(result);
+//lowercase email case to be handle
+    if(result.password==this.state.password){
+      console.log('in');
+    }
+
+    
+     localStorage.setItem('token', 'a2wqswq2wsed');
+     this.setState({ success: true });
   };
 
   render() {
@@ -117,4 +131,10 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state =>{
+  return{
+    user:state.user
+  };
+}
+
+export default connect(mapStateToProps)(Login);

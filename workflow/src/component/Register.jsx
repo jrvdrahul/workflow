@@ -2,6 +2,8 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
+import {connect} from 'react-redux';
+
 // reactstrap components
 import {
   Button,
@@ -24,12 +26,14 @@ class Register extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      success: false,
+      success:false
     };
   }
   // register event
   register = (e) => {
     e.preventDefault();
+
+
     if (this.state.email === '' || this.state.email === undefined) {
       NotificationManager.error('Email is required', 'Error!');
       return false;
@@ -49,12 +53,20 @@ class Register extends React.Component {
       NotificationManager.error('Password do not matched', 'Error!');
       return false;
     }
-    NotificationManager.success('Registered Successfully');
+
+    const val=[this.state]
+    this.props.register(val);
+    console.log(this.props.user);
+
+    this.setState({ success: true });
+
+    
+    // NotificationManager.success('Registered Successfully');
   };
 
   render() {
     if (this.state.success) {
-      return <Redirect to="dashboard/index" />;
+      return <Redirect to="/" />;
     }
     return (
       <>
@@ -64,6 +76,8 @@ class Register extends React.Component {
               <CardBody className="px-lg-5 py-lg-5">
                 <h3 className="text-center">Sign up</h3>
                 {/* register form */}
+                {console.log(this.props.user)}
+                
                 <Form onSubmit={this.register}>
                   <FormGroup>
                     <InputGroup className="input-group-alternative mb-3">
@@ -101,7 +115,7 @@ class Register extends React.Component {
                     <InputGroup className="input-group-alternative mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
-                          <i class="fas fa-asterisk"></i>
+                          <i className="fas fa-asterisk"></i>
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
@@ -118,6 +132,7 @@ class Register extends React.Component {
                     <Button className="mt-4" color="secondary" type="submit">
                       Sign up
                     </Button>
+                    
                   </div>
                   <div className="mt-4 blue-text">
                     Already have an Account ? <Link to="/">Login here</Link>
@@ -133,4 +148,17 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+
+const mapStateToProps = state =>{
+  return{
+    user:state.user
+  };
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    register: (val) => dispatch({type: 'INCREMENT',val:val})
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Register);
