@@ -19,7 +19,7 @@ import {
   NotificationManager,
 } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-import data from '../../Data.json';
+import {connect} from 'react-redux';
 import Header from './Header';
 
 class Workflow extends React.Component {
@@ -34,24 +34,24 @@ class Workflow extends React.Component {
 
   componentDidMount() {
     this.setState({
-      workflows: data,
+      workflows: this.props.workflow,
     });
   }
 
   // workflow state change
   stateChange(event, index) {
     event.preventDefault();
-    var pass = data[index].nodes.filter(
+    var pass = this.props.workflow[index].nodes.filter(
       (data) => data.state === 'pending' || data.state === 'progress'
     );
 
     if (pass.length < 1) {
-      if (data[index].state === 'pending') {
-        data[index].state = 'completed';
+      if (this.props.workflow[index].state === 'pending') {
+        this.props.workflow[index].state = 'completed';
       } else {
-        data[index].state = 'pending';
+        this.props.workflow[index].state = 'pending';
       }
-      this.setState({ workflows: data });
+      this.setState({ workflows: this.props.workflow });
     } else {
       NotificationManager.error('Complete all node first', 'Error!');
     }
@@ -59,23 +59,25 @@ class Workflow extends React.Component {
 
   // delete workflow
   WorkflowDelete(event, index) {
+    console.log(this.props.workflow);
     event.preventDefault();
-    data.splice(index, 1);
-    this.setState({ workflows: data });
+    this.props.workflow.splice(index, 1);
+    this.setState({ workflows: this.props.workflow });
+    console.log(this.props.workflow);
   }
 
   // search workflow
   filterList(event) {
-    var list = data;
+    var list = this.props.workflow;
     var result = list.filter((list) => list.name.includes(event.target.value));
     this.setState({ workflows: result });
   }
 
   // filter workflow
   filter = (e) => {
-    var list = data;
+    var list = this.props.workflow;
     if (e.target.value === 'All') {
-      this.setState({ workflows: data });
+      this.setState({ workflows: this.props.workflow });
     } else {
       var result = list.filter((list) => list.state === e.target.value);
       this.setState({ workflows: result });
@@ -88,6 +90,7 @@ class Workflow extends React.Component {
     }
 
     let workflows = this.state.workflows;
+    console.log(this.props.workflow);
     return (
       <>
         <Container fluid>
@@ -177,4 +180,16 @@ class Workflow extends React.Component {
   }
 }
 
-export default Workflow;
+const mapStateToProps = state =>{
+  return{
+    workflow:state.workflow
+  };
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    saveWorkflow: (val) => dispatch({type: 'SAVEWORKFLOW',val:val})
+  }
+}
+
+export default connect(mapStateToProps)(Workflow);

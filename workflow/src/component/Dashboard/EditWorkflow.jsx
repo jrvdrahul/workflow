@@ -17,7 +17,7 @@ import {
   NotificationManager,
 } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-import Data from '../../Data.json';
+import {connect} from 'react-redux';
 import Header from './Header';
 
 var newArr = [];
@@ -32,17 +32,20 @@ class EditWorkflow extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props.workflow);
+   
     var id = this.props.match.params.id;
     if (id != undefined) {
-      var result = Data.filter((data) => data.id == id);
+      var result = this.props.workflow.filter((data) => data.id == id);
       this.setState({
         name: result[0].name,
+        state:result[0].state,
         node: [...result[0].nodes],
       });
     } else {
       newArr = [];
       newArr.push({
-        id: Data.length,
+        id: this.props.workflow.length,
         name: '',
         state: 'pending',
         nodes: [],
@@ -69,6 +72,7 @@ class EditWorkflow extends React.Component {
     this.state.node.pop();
     this.setState({ node: this.state.node });
     NotificationManager.success('Node Deleted Successfully');
+    
   }
 
   // add node
@@ -93,6 +97,12 @@ class EditWorkflow extends React.Component {
     this.state.node[index].content = event.target.value;
     this.setState({ node: this.state.node });
   }
+  
+  //shuffle event
+  shuffle(){
+    var result=this.state.node.sort( () => Math.random() - 0.5) 
+    this.setState({ node: result });
+  }
 
   // save event
   save() {
@@ -106,13 +116,16 @@ class EditWorkflow extends React.Component {
     var id = this.props.match.params.id;
 
     if (id) {
-      Data[id].name = this.state.name;
-      Data[id].nodes = this.state.node;
+      this.props.workflow[id].name = this.state.name;
+      this.props.workflow[id].nodes = this.state.node;
     } else {
       newArr[0].name = this.state.name;
       newArr[0].nodes = this.state.node;
-      Data.push(newArr[0]);
+      this.props.workflow.push(newArr[0]);
     }
+
+    this.props.saveWorkflow(this.props.workflow);
+
     NotificationManager.success('Worflow Updated Successfully');
 
     setTimeout(() => {
@@ -145,7 +158,9 @@ class EditWorkflow extends React.Component {
                 </FormGroup>
               </Col>
               <Col md="8" className="text-right">
-                <Button color="secondary">Shuffle</Button>
+
+                {this.state.state =='completed'? (<Button color="secondary" onClick={()=> this.shuffle()}>Shuffle</Button>):(<></>)}
+                
                 <Button color="secondary" onClick={() => this.deleteNode()}>
                   Delete
                 </Button>
@@ -204,4 +219,16 @@ class EditWorkflow extends React.Component {
   }
 }
 
-export default EditWorkflow;
+const mapStateToProps = state =>{
+  return{
+    workflow:state.workflow
+  };
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    saveWorkflow: (val) => dispatch({type: 'SAVEWORKFLOW',val:val})
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(EditWorkflow);
