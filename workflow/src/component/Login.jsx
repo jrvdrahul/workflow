@@ -67,8 +67,9 @@ class Login extends React.Component {
     if (this.state.success) {
       return <Redirect to="dashboard/index" />;
     }
+
+    console.log(this.props.user);
     return (
-      <>
         <section id="login" className="perfect-center">
           <div className="login">
             <Card className="shadow border-0">
@@ -129,7 +130,6 @@ class Login extends React.Component {
           </div>
           <NotificationContainer />
         </section>
-      </>
     );
   }
 }

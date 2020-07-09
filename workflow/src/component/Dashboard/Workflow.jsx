@@ -27,32 +27,30 @@ class Workflow extends React.Component {
     super(props);
     this.state = {
       workflows: [],
+      filter:false,
       success: false,
       filter: 0,
     };
   }
 
-  componentDidMount() {
-    
-   this.setState({
-      workflows: [...this.props.workflow],
-    });
-  }
-
+  
   // workflow state change
   stateChange(event, index) {
     event.preventDefault();
-    var pass = this.props.workflow[index].nodes.filter(
+
+    var Data=[...this.props.workflow];
+
+    var pass = Data[index].nodes.filter(
       (data) => data.state === 'pending' || data.state === 'progress'
     );
 
     if (pass.length < 1) {
-      if (this.props.workflow[index].state === 'pending') {
-        this.props.workflow[index].state = 'completed';
+      if (Data[index].state === 'pending') {
+        Data[index].state = 'completed';
       } else {
-        this.props.workflow[index].state = 'pending';
+        Data[index].state = 'pending';
       }
-      this.setState({ workflows: this.props.workflow });
+      this.props.saveWorkflow(Data);
     } else {
       NotificationManager.error('Complete all node first', 'Error!');
     }
@@ -60,15 +58,19 @@ class Workflow extends React.Component {
 
   // delete workflow
   WorkflowDelete(event, index) {
-    console.log(this.props.workflow);
     event.preventDefault();
-    this.state.workflows.splice(index, 1);
-    this.setState({ workflows: this.state.workflows });
-    console.log(this.props.workflow);
+    var Data=[...this.props.workflow];
+    Data.splice(index, 1);
+    this.props.saveWorkflow(Data);
   }
 
   // search workflow
   filterList(event) {
+    if(event.target.value.length==0){
+      this.setState({filter:false})
+    }else{
+      this.setState({filter:true})
+    }
     var list = this.props.workflow;
     var result = list.filter((list) => list.name.includes(event.target.value));
     this.setState({ workflows: result });
@@ -78,8 +80,9 @@ class Workflow extends React.Component {
   filter = (e) => {
     var list = this.props.workflow;
     if (e.target.value === 'All') {
-      this.setState({ workflows: this.props.workflow });
+      this.setState({filter:false})
     } else {
+      this.setState({filter:true})
       var result = list.filter((list) => list.state === e.target.value);
       this.setState({ workflows: result });
     }
@@ -90,8 +93,9 @@ class Workflow extends React.Component {
       return <Redirect to="dashboard/index" />;
     }
 
-    let workflows = this.state.workflows;
-    console.log(this.props.workflow);
+     let workflows = this.state.filter ? this.state.workflows : this.props.workflow;
+     //let workflows = this.props.workflow;
+    
     return (
       <>
         <Container fluid>
@@ -101,7 +105,7 @@ class Workflow extends React.Component {
             {/* action bar */}
             <Row className="actionBar">
               <Col md="4">
-                {console.log(this.props.workflow)}
+                {console.log(this.props.workflow,this.props.user)}
                 <div>Search workflows based on workflow name</div>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -184,6 +188,7 @@ class Workflow extends React.Component {
 
 const mapStateToProps = state =>{
   return{
+    user:state.user,
     workflow:state.workflow
   };
 }

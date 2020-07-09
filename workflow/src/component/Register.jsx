@@ -69,7 +69,7 @@ class Register extends React.Component {
     return (
       <>
         <section id="register" className="perfect-center">
-          <div className="login">
+          <div className="register">
             <Card className="shadow border-0">
               <CardBody className="px-lg-5 py-lg-5">
                 <h3 className="text-center">Sign up</h3>

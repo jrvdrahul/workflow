@@ -13,13 +13,13 @@ const store = createStore(reducer);
 
 ReactDOM.render(
   <BrowserRouter>
+  <Provider store={store}>
     <Switch>
-      <Provider store={store}>
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/signUp" component={Signup} />
       <Route path="/" component={App} />
-      </Provider>
     </Switch>
+    </Provider>
   </BrowserRouter>,
   document.getElementById('root')
 );

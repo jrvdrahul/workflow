@@ -1,5 +1,5 @@
 const initialState={
-    user:[],
+    user:[{email:'a@gmail.com',password:'abcd'},],
     workflow:[
         {
           "id": 0,

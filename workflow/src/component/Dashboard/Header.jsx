@@ -17,6 +17,7 @@ class Header extends React.Component {
   }
 
   render() {
+    console.log('SDf');
     if (this.state.logout) {
       return <Redirect to="/" />;
     }
