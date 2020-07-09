@@ -56,8 +56,6 @@ class Register extends React.Component {
 
     const val=[this.state]
     this.props.register(val);
-    console.log(this.props.user);
-
     this.setState({ success: true });
 
     
@@ -76,8 +74,6 @@ class Register extends React.Component {
               <CardBody className="px-lg-5 py-lg-5">
                 <h3 className="text-center">Sign up</h3>
                 {/* register form */}
-                {console.log(this.props.user)}
-                
                 <Form onSubmit={this.register}>
                   <FormGroup>
                     <InputGroup className="input-group-alternative mb-3">

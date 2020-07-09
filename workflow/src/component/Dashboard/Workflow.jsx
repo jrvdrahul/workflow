@@ -33,8 +33,9 @@ class Workflow extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
-      workflows: this.props.workflow,
+    
+   this.setState({
+      workflows: [...this.props.workflow],
     });
   }
 
@@ -61,8 +62,8 @@ class Workflow extends React.Component {
   WorkflowDelete(event, index) {
     console.log(this.props.workflow);
     event.preventDefault();
-    this.props.workflow.splice(index, 1);
-    this.setState({ workflows: this.props.workflow });
+    this.state.workflows.splice(index, 1);
+    this.setState({ workflows: this.state.workflows });
     console.log(this.props.workflow);
   }
 
@@ -100,6 +101,7 @@ class Workflow extends React.Component {
             {/* action bar */}
             <Row className="actionBar">
               <Col md="4">
+                {console.log(this.props.workflow)}
                 <div>Search workflows based on workflow name</div>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -121,9 +123,9 @@ class Workflow extends React.Component {
                       onChange={this.filter}
                       value={this.state.filter}
                     >
-                      <option value="0" disabled selected>
+                      {/* <option value="0" disabled selected>
                         Select state
-                      </option>
+                      </option> */}
                       <option value="All">All</option>
                       <option value="pending">Pending</option>
                       <option value="completed">Completed</option>
@@ -188,8 +190,9 @@ const mapStateToProps = state =>{
 
 const mapDispatchToProps = dispatch => {
   return {
-    saveWorkflow: (val) => dispatch({type: 'SAVEWORKFLOW',val:val})
+    saveWorkflow: (val) => dispatch({type: 'SAVEWORKFLOW',val:val}),
+    getWorkflow:(val) => dispatch({type: 'GETWORKFLOW'})
   }
 }
 
-export default connect(mapStateToProps)(Workflow);
+export default connect(mapStateToProps,mapDispatchToProps)(Workflow);

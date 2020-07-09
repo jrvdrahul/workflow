@@ -47,17 +47,20 @@ class Login extends React.Component {
     }
 
 
-    console.log(this.props.user);
-    var result=this.props.user.find(data=>data.email==this.state.email)
-    console.log(result);
-//lowercase email case to be handle
-    if(result.password==this.state.password){
-      console.log('in');
+    var result=this.props.user.find(data=>data.email.toLowerCase()===this.state.email.toLowerCase())
+    
+    if(result){
+      if(result.password===this.state.password){
+        localStorage.setItem('token', 'a2wqswq2wsed');
+        this.setState({ success: true });
+      }else{
+        NotificationManager.error('Incorrect Password', 'Error!');
+      }
+    }
+    else{
+      NotificationManager.error('User not found', 'Error!');
     }
 
-    
-     localStorage.setItem('token', 'a2wqswq2wsed');
-     this.setState({ success: true });
   };
 
   render() {

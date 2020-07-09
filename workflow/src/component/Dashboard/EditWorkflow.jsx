@@ -56,6 +56,15 @@ class EditWorkflow extends React.Component {
 
   // node state change
   stateChange(index) {
+
+    console.log('index',index);
+    if(index !=0){
+      if(this.state.node[index-1].state !== 'completed'){
+        NotificationManager.error('Complete previous node first', 'Error!');
+        return false;
+      }
+    }
+
     if (this.state.node[index].state === 'pending') {
       this.state.node[index].state = 'progress';
     } else if (this.state.node[index].state === 'progress') {

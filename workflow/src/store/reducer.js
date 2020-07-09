@@ -37,6 +37,11 @@ const reducer = (state =initialState ,action) => {
             workflow:action.val
         }
     }
+    if(action.type==='GETWORKFLOW'){
+      return{
+        workflow:state.workflow
+      }
+    }
     
     return state;
 }
