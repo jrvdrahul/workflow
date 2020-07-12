@@ -143,7 +143,7 @@ class EditWorkflow extends React.Component {
 
     this.props.saveWorkflow(this.state.workflow);
 
-    NotificationManager.success('Worflow Updated Successfully','Success',1000);
+    NotificationManager.success('Worflow Updated Successfully','Success',500);
 
     setTimeout(() => {
      this.setState({success:true})

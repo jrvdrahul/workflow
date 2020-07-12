@@ -9,21 +9,21 @@ const initialState={
           "state": "pending",
           "nodes": [
             { "title": "node1", "content": "content", "state": "pending" },
-            { "title": "node2", "content": "content2", "state": "progress" },
-            { "title": "node3", "content": "content3", "state": "completed" }
+            { "title": "node2", "content": "content2", "state": "pending" },
+            { "title": "node3", "content": "content3", "state": "pending" }
           ]
         },
         {
           "id": 1,
           "name": "workflow2",
           "state": "pending",
-          "nodes": [{ "title": "node4", "content": "content", "state": "progress" }]
+          "nodes": [{ "title": "node4", "content": "content", "state": "pending" }]
         },
         {
           "id": 2,
           "name": "workflow3",
           "state": "pending",
-          "nodes": [{ "title": "node5", "content": "content", "state": "progress" }]
+          "nodes": [{ "title": "node5", "content": "content", "state": "pending" }]
         }
       ],
       isAuthenticated:false

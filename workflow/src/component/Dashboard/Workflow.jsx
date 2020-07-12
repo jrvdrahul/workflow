@@ -52,6 +52,7 @@ class Workflow extends React.Component {
         Data[index].state = 'pending';
       }
       this.props.saveWorkflow(Data);
+      NotificationManager.success('State Updated Succesfully', 'success!',1000);
     } else {
       NotificationManager.error('Complete all node first', 'Error!',1000);
     }
@@ -74,7 +75,7 @@ class Workflow extends React.Component {
     var list = this.props.workflow;
     var result = list.filter((list) => list.name.includes(event.target.value));
     this.setState({ workflows: result });
-    NotificationManager.success('State Updated Succesfully', 'success!',1000);
+    
   }
 
   // filter workflow
