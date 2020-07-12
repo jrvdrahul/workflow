@@ -21,6 +21,7 @@ import {
 import 'react-notifications/lib/notifications.css';
 import {connect} from 'react-redux';
 import Header from './Header';
+import * as actionTypes from '../../store/action'
 
 class Workflow extends React.Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class Workflow extends React.Component {
       workflows: [],
       filter:false,
       success: false,
-      filter: 0,
+      filterValue: 'All',
     };
   }
 
@@ -52,16 +53,15 @@ class Workflow extends React.Component {
       }
       this.props.saveWorkflow(Data);
     } else {
-      NotificationManager.error('Complete all node first', 'Error!');
+      NotificationManager.error('Complete all node first', 'Error!',1000);
     }
   }
 
   // delete workflow
   WorkflowDelete(event, index) {
     event.preventDefault();
-    var Data=[...this.props.workflow];
-    Data.splice(index, 1);
-    this.props.saveWorkflow(Data);
+    this.props.deleteWorkflow(index);
+    NotificationManager.success('Workflow Deleted Succesfully', 'success!',1000);
   }
 
   // search workflow
@@ -74,15 +74,16 @@ class Workflow extends React.Component {
     var list = this.props.workflow;
     var result = list.filter((list) => list.name.includes(event.target.value));
     this.setState({ workflows: result });
+    NotificationManager.success('State Updated Succesfully', 'success!',1000);
   }
 
   // filter workflow
   filter = (e) => {
     var list = this.props.workflow;
     if (e.target.value === 'All') {
-      this.setState({filter:false})
+      this.setState({filter:false,filterValue:e.target.value})
     } else {
-      this.setState({filter:true})
+      this.setState({filter:true,filterValue:e.target.value})
       var result = list.filter((list) => list.state === e.target.value);
       this.setState({ workflows: result });
     }
@@ -94,7 +95,6 @@ class Workflow extends React.Component {
     }
 
      let workflows = this.state.filter ? this.state.workflows : this.props.workflow;
-     //let workflows = this.props.workflow;
     
     return (
       <>
@@ -105,7 +105,6 @@ class Workflow extends React.Component {
             {/* action bar */}
             <Row className="actionBar">
               <Col md="4">
-                {console.log(this.props.workflow,this.props.user)}
                 <div>Search workflows based on workflow name</div>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -125,11 +124,8 @@ class Workflow extends React.Component {
                       type="select"
                       name="Select state"
                       onChange={this.filter}
-                      value={this.state.filter}
+                      value={this.state.filterValue}
                     >
-                      {/* <option value="0" disabled selected>
-                        Select state
-                      </option> */}
                       <option value="All">All</option>
                       <option value="pending">Pending</option>
                       <option value="completed">Completed</option>
@@ -137,9 +133,9 @@ class Workflow extends React.Component {
                   </InputGroup>
                 </FormGroup>
               </Col>
-              <Col md="6" className="text-right">
-                <Button color="secondary" to="createWorkflow" tag={Link}>
-                  Create Workflow
+              <Col md="6" className="text-right action-button">
+                <Button color="secondary add" to="createWorkflow" tag={Link}>
+                <i className="fas fa-plus"></i> Create Workflow
                 </Button>
               </Col>
             </Row>
@@ -147,7 +143,7 @@ class Workflow extends React.Component {
             <Row className="workflowList">
               {workflows.map((data, index) => (
                 <Col md="3" className="mt-50" key={index}>
-                  <Link to={'editWorkflow/' + data.id}>
+                  <Link to={'editWorkflow/' + index}>
                     <Card>
                       <div
                         className="delete"
@@ -195,8 +191,8 @@ const mapStateToProps = state =>{
 
 const mapDispatchToProps = dispatch => {
   return {
-    saveWorkflow: (val) => dispatch({type: 'SAVEWORKFLOW',val:val}),
-    getWorkflow:(val) => dispatch({type: 'GETWORKFLOW'})
+    saveWorkflow: (val) => dispatch({type: actionTypes.SAVEWORKFLOW ,val:val}),
+    deleteWorkflow:(val) => dispatch({type: actionTypes.DELETEWORKFLOW , val:val})
   }
 }
 

@@ -1,0 +1,4 @@
+export const ADDUSER = 'ADDUSER';
+export const LOGGED ='LOGGED';
+export const SAVEWORKFLOW ='SAVEWORKFLOW';
+export const DELETEWORKFLOW='DELETEWORKFLOW';

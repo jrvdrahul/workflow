@@ -1,3 +1,5 @@
+import * as actionTypes from './action'
+
 const initialState={
     user:[{email:'a@gmail.com',password:'abcd'},],
     workflow:[
@@ -23,26 +25,31 @@ const initialState={
           "state": "pending",
           "nodes": [{ "title": "node5", "content": "content", "state": "progress" }]
         }
-      ]
+      ],
+      isAuthenticated:false
 }
 
 const reducer = (state =initialState ,action) => {
-    if(action.type==='INCREMENT'){
-        return{
-            user:action.val
-        }
-    }
-    if(action.type==='SAVEWORKFLOW'){
-        return{
-            workflow:action.val
-        }
-    }
-    if(action.type==='GETWORKFLOW'){
+  switch(action.type){
+    case actionTypes.ADDUSER:
       return{
-        workflow:state.workflow
+          user:state.user
       }
-    }
-    
+    case actionTypes.LOGGED:
+      return{
+        isAuthenticated:action.val
+      }  
+    case actionTypes.SAVEWORKFLOW:
+      return{
+        workflow:action.val
+      }
+    case actionTypes.DELETEWORKFLOW:
+      const updated=[...state.workflow];
+      updated.splice(action.val, 1)
+      return{
+        workflow:updated
+      }
+  }
     return state;
 }
 

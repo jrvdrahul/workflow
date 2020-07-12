@@ -67,3 +67,36 @@ a {
 #workflow,#editWorkflow{
   margin: 10px;
 }
+.width100{
+  width: 100%;
+}
+.user{
+  display: flex;
+  align-items: center;
+}
+
+
+/* button css */
+
+.btn.shuffle{
+  background-color:#7800b7 !important;
+}
+.btn.delete-node{
+  background-color:#fd072a !important;
+}
+.btn.add{
+background-color:#14bc50 !important;
+}
+.btn.save{
+  background-color:#3a5cd9 !important;
+}
+.btn.logout{
+  background-color: #f5f5f5 !important;
+  color: black;
+}
+.btn{
+  border-radius: 10px;
+}
+.action-button i{
+  margin-right: 10px;
+}

@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './index.css';
+import ProtectedRoute from './ProtectedRoute';
 import App from './App';
-import Signup from './component/Register';
-import Dashboard from './component/Dashboard/Index';
+import Workflow from './component/Dashboard/Workflow';
+import EditWorkflow from './component/Dashboard/EditWorkflow';
 
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
@@ -15,8 +16,9 @@ ReactDOM.render(
   <BrowserRouter>
   <Provider store={store}>
     <Switch>
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/signUp" component={Signup} />
+      <ProtectedRoute path="/editWorkflow/:id" component={EditWorkflow} />
+      <ProtectedRoute path="/createWorkflow/" component={EditWorkflow} />
+      <ProtectedRoute path="/workflow" component={Workflow} />
       <Route path="/" component={App} />
     </Switch>
     </Provider>

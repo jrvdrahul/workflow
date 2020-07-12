@@ -13,22 +13,19 @@ class Header extends React.Component {
 
   logout() {
     localStorage.removeItem('token');
-    this.setState({logout:true})
+    window.location.assign('/');
   }
 
   render() {
-    console.log('SDf');
-    if (this.state.logout) {
-      return <Redirect to="/" />;
-    }
+    
     return (
       <>
         {/* commom header */}
         <Row className="header">
           <Col></Col>
-          <Col className="text-right">
-            <Button color="secondary" onClick={() => this.logout()}>
-              Logout
+          <Col className="text-right action-button">
+            <Button color="secondary logout" onClick={() => this.logout()}>
+            <i className="fas fa-sign-out-alt"></i> Logout
             </Button>
           </Col>
         </Row>

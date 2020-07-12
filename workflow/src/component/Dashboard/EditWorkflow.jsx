@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Redirect } from 'react-router-dom';
 // reactstrap components
 import {
   Button,
@@ -18,7 +18,9 @@ import {
 } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import {connect} from 'react-redux';
+import * as actionTypes from '../../store/action'
 import Header from './Header';
+
 
 var newArr = [];
 
@@ -26,21 +28,25 @@ class EditWorkflow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      workflow:[],
       node: [],
       success: false,
     };
   }
 
   componentDidMount() {
-    console.log(this.props.workflow);
-   
-    var id = this.props.match.params.id;
+    
+    this.setState({
+      workflow:this.props.workflow
+    })
+    
+    var id = this.props.computedMatch.params.id;
     if (id != undefined) {
-      var result = this.props.workflow.filter((data) => data.id == id);
+      var result = this.props.workflow[id];
       this.setState({
-        name: result[0].name,
-        state:result[0].state,
-        node: [...result[0].nodes],
+        name: result.name,
+        state:result.state,
+        node: [...result.nodes],
       });
     } else {
       newArr = [];
@@ -57,10 +63,9 @@ class EditWorkflow extends React.Component {
   // node state change
   stateChange(index) {
 
-    console.log('index',index);
     if(index !=0){
       if(this.state.node[index-1].state !== 'completed'){
-        NotificationManager.error('Complete previous node first', 'Error!');
+        NotificationManager.error('Complete previous node first', 'Error!',1000);
         return false;
       }
     }
@@ -80,7 +85,7 @@ class EditWorkflow extends React.Component {
   deleteNode() {
     this.state.node.pop();
     this.setState({ node: this.state.node });
-    NotificationManager.success('Node Deleted Successfully');
+    NotificationManager.success('Node Deleted Successfully','Success',1000);
     
   }
 
@@ -92,7 +97,7 @@ class EditWorkflow extends React.Component {
       state: 'pending',
     });
     this.setState({ node: this.state.node });
-    NotificationManager.success('Node Added Successfully');
+    NotificationManager.success('Node Added Successfully','Success',1000);
   }
 
   // title change event
@@ -116,33 +121,39 @@ class EditWorkflow extends React.Component {
   // save event
   save() {
     if(!this.state.name){
-      NotificationManager.error('Workflow Name is required', 'Error!');
+      NotificationManager.error('Workflow Name is required', 'Error!',1000);
       return false;
     }
+    var emptyNode=this.state.node.filter((data)=>data.title=="" || data.content=="")
+    if(emptyNode.length>0){
+      NotificationManager.error('Please fill node', 'Error!',1000);
+      return false;
+    }
+    
 
-    console.log('innnnn')
-
-    var id = this.props.match.params.id;
-
+    var id = this.props.computedMatch.params.id;
     if (id) {
-      this.props.workflow[id].name = this.state.name;
-      this.props.workflow[id].nodes = this.state.node;
+      this.state.workflow[id].name = this.state.name;
+      this.state.workflow[id].nodes = this.state.node;
     } else {
       newArr[0].name = this.state.name;
       newArr[0].nodes = this.state.node;
-      this.props.workflow.push(newArr[0]);
+      this.state.workflow.push(newArr[0]);
     }
 
-    this.props.saveWorkflow(this.props.workflow);
+    this.props.saveWorkflow(this.state.workflow);
 
-    NotificationManager.success('Worflow Updated Successfully');
+    NotificationManager.success('Worflow Updated Successfully','Success',1000);
 
     setTimeout(() => {
-      this.props.history.push('/dashboard/index');
+     this.setState({success:true})
     }, 800);
   }
 
   render() {
+    if(this.state.success){
+      return <Redirect to="/workflow" />;
+    }
     let node = this.state.node;
     return (
       <>
@@ -166,17 +177,18 @@ class EditWorkflow extends React.Component {
                   </InputGroup>
                 </FormGroup>
               </Col>
-              <Col md="8" className="text-right">
+              <Col md="8" className="text-right action-button">
 
-                {this.state.state =='completed'? (<Button color="secondary" onClick={()=> this.shuffle()}>Shuffle</Button>):(<></>)}
+                {this.state.state =='completed'? (<Button color="secondary shuffle" onClick={()=> this.shuffle()}>
+                <i className="fas fa-random"></i>Shuffle</Button>):(<></>)}
                 
-                <Button color="secondary" onClick={() => this.deleteNode()}>
-                  Delete
+                <Button color="secondary delete-node" onClick={() => this.deleteNode()}>
+                <i className="fas fa-times"></i> Delete
                 </Button>
-                <Button color="secondary" onClick={() => this.addNode()}>
-                  Add Note
+                <Button color="secondary add" onClick={() => this.addNode()}>
+                <i className="fas fa-plus"></i> Add Note
                 </Button>
-                <Button color="secondary" onClick={() => this.save()}>
+                <Button color="secondary save" onClick={() => this.save()}>
                   Save
                 </Button>
               </Col>
@@ -236,7 +248,7 @@ const mapStateToProps = state =>{
 
 const mapDispatchToProps = dispatch => {
   return {
-    saveWorkflow: (val) => dispatch({type: 'SAVEWORKFLOW',val:val})
+    saveWorkflow: (val) => dispatch({type: actionTypes.SAVEWORKFLOW,val:val})
   }
 }
 

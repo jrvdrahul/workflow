@@ -22,7 +22,7 @@ import {
   NotificationManager,
 } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-
+import * as actionTypes from '../store/action'
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -36,13 +36,13 @@ class Login extends React.Component {
     e.preventDefault();
 
     if (this.state.email === '' || this.state.email === undefined) {
-      NotificationManager.error('Email is required', 'Error!');
+      NotificationManager.error('Email is required', 'Error!',1000);
       return false;
     } else if (
       this.state.password === '' ||
       this.state.password === undefined
     ) {
-      NotificationManager.error('Password is required', 'Error!');
+      NotificationManager.error('Password is required', 'Error!',1000);
       return false;
     }
 
@@ -54,21 +54,20 @@ class Login extends React.Component {
         localStorage.setItem('token', 'a2wqswq2wsed');
         this.setState({ success: true });
       }else{
-        NotificationManager.error('Incorrect Password', 'Error!');
+        NotificationManager.error('Incorrect Password', 'Error!',1000);
       }
     }
     else{
-      NotificationManager.error('User not found', 'Error!');
+      NotificationManager.error('User not found', 'Error!',1000);
     }
 
   };
 
   render() {
     if (this.state.success) {
-      return <Redirect to="dashboard/index" />;
+      return <Redirect to="workflow" />;
     }
 
-    console.log(this.props.user);
     return (
         <section id="login" className="perfect-center">
           <div className="login">
@@ -115,14 +114,13 @@ class Login extends React.Component {
                     </Label>
                   </FormGroup>
 
-                  <div className="text-center ">
-                    <Button className="mt-4" color="secondary" type="submit">
+                  <div className="text-center">
+                    <Button className="mt-4 width100" color="primary" type="submit">
                       Login
                     </Button>
                   </div>
-                  <div className="mt-4 blue-text">
-                    Don't have an Account ?
-                    <Link to="signUp"> Sign up here</Link>
+                  <div className="mt-4 blue-text text-center">
+                    Don't have an Account ? Sign up here
                   </div>
                 </Form>
               </CardBody>
@@ -136,8 +134,16 @@ class Login extends React.Component {
 
 const mapStateToProps = state =>{
   return{
-    user:state.user
+    user:state.user,
+    isAuthenticated:state.isAuthenticated
   };
 }
 
-export default connect(mapStateToProps)(Login);
+const mapDispatchToProps = dispatch => {
+  return {
+    saveWorkflow: (val) => dispatch({type: actionTypes.SAVEWORKFLOW,val:val}),
+    logged: (val) => dispatch({type:actionTypes.LOGGED,val:val })
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Login);
